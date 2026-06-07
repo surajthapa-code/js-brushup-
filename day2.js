@@ -39,6 +39,12 @@ const totalPrice = productPrices.reduce((acc, curr) => {
   return acc;
 }, 0);
 console.log(totalPrice);
+// 6. Return item names using reduce
+const itemNames = products.reduce((acc, curr) => {
+  acc.push(curr.name);
+  return acc;
+}, []);
+console.log(itemNames);
 // 7. Get the total price of only in-stock products — using filter and reduce chained together in one line
 const inStock = products
   .filter((obj) => obj.inStock)
