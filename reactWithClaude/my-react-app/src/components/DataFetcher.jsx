@@ -12,7 +12,7 @@ function DataFetcher() {
         const res = await fetch("https://jsonplaceholder.typicode.com/users");
         const dataset = await res.json();
         setData(dataset);
-       
+
         setError(false);
       } catch {
         setError(true);
@@ -20,9 +20,9 @@ function DataFetcher() {
         setLoading(false);
       }
     }
-    fetchData()
+    fetchData();
   }, []);
-  
+
   return (
     <>
       <p>{loading && "loading..."}</p>
