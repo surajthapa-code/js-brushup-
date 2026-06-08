@@ -2,27 +2,110 @@ Moving to map, filter, reduce
 These three are in every React codebase. Rendering lists, filtering data, transforming API responses — all of it uses these. Learn them properly now.
 
 map — transform every item
-javascriptconst numbers = [1, 2, 3, 4]
-const doubled = numbers.map(num => num * 2)
-console.log(doubled) // [2, 4, 6, 8]
-Original array is untouched. map always returns a new array of the same length.
+
+```javascript
+const numbers = [1, 2, 3, 4];
+const doubled = numbers.map((num) => num * 2);
+console.log(doubled); // [2, 4, 6, 8]
+```
+
+Original array is untouched. `map` always returns a new array of the same length.
+
+Example from `day2.js`:
+
+- `users.map(user => user.name)` returns just the names.
+- `users.map(user => ({ ...user, isAdult: true }))` returns a new array of objects with the extra property.
+
+Why this matters:
+
+- In React, `map` is how you turn data into JSX lists.
+- It does not mutate the original array, so it is safe for rendering and state updates.
 
 filter — keep items that pass a condition
-javascriptconst numbers = [1, 2, 3, 4, 5]
-const evens = numbers.filter(num => num % 2 === 0)
-console.log(evens) // [2, 4]
+
+```javascript
+const numbers = [1, 2, 3, 4, 5];
+const evens = numbers.filter((num) => num % 2 === 0);
+console.log(evens); // [2, 4]
+```
+
 Returns a new array, shorter or equal length. Never longer.
+
+Example from `day2.js`:
+
+- `users.filter(user => user.age >= 20)` keeps only adults.
+- `users.filter(user => user.name.startsWith("A"))` keeps only names starting with A.
+
+Why this matters:
+
+- Use `filter` to show only items that match a condition.
+- In React, it is common for search, sort, and visibility logic.
 
 reduce — collapse array into a single value
 This one trips people up. Read carefully.
-javascriptconst numbers = [1, 2, 3, 4]
+
+```javascript
+const numbers = [1, 2, 3, 4];
 const sum = numbers.reduce((accumulator, current) => {
-  return accumulator + current
-}, 0)  // 0 is the starting value
-console.log(sum) // 10
+  return accumulator + current;
+}, 0);
+console.log(sum); // 10
+```
 
-accumulator — the running result
-current — the current item being processed
-0 — what accumulator starts as
+- `accumulator` is the running result.
+- `current` is the current item being processed.
+- `0` is the starting value.
 
-Think of it like a snowball rolling down a hill, collecting snow. Accumulator is the snowball.
+Think of it like a snowball rolling down a hill, collecting snow. The accumulator is the snowball.
+
+Examples from `day2.js`:
+
+- `productPrices.reduce((acc, curr) => acc + curr, 0)` calculates total price.
+- `products.reduce((acc, curr) => { acc.push(curr.name); return acc }, [])` builds an array of item names.
+
+Why this matters:
+
+- `reduce` can do more than math. It can build arrays, objects, or any single result.
+- It is useful when you need a summary or complex transformation from an array.
+
+Chaining `filter` and `reduce`
+The last exercise combines both in one line:
+
+```javascript
+const inStock = products
+  .filter((obj) => obj.inStock)
+  .reduce((acc, curr) => acc + curr.price, 0);
+```
+
+This means:
+
+1. Keep only products that are in stock.
+2. Add up the prices of those filtered products.
+
+Why this matters:
+
+- Chaining keeps code compact and expressive.
+- In real apps, you often filter data first, then summarize it.
+
+Specific exercise questions explained
+
+- "Return a new array of just the names": use `map` to extract only the `name` field.
+- "Return a new array of objects with a new property added": use `map` to copy each object and add `isAdult`.
+- "Return only users who are 20 or older": use `filter` with a numeric condition.
+- "Return only users whose name starts with the letter 'A'": use `filter` and string matching.
+- "Calculate the total price of all orders": use `reduce` to sum the `price` values.
+- "Return an array of just the item names using reduce — not map": use `reduce` with an array accumulator and `push`.
+- "Get the total price of only in-stock products — using filter and reduce chained together in one line": first `filter` in-stock items, then `reduce` their prices.
+
+React connection
+
+- `map` is how we render arrays of components.
+- `filter` is how we decide which items show up.
+- `reduce` is how we compute totals, counts, or transformed results.
+
+Summary
+
+- `map` keeps array length the same and transforms every item.
+- `filter` keeps only matching items.
+- `reduce` collapses an array into a single value or structure.
+- Use chaining when you need multiple steps in a single flow.

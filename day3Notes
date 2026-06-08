@@ -14,40 +14,112 @@ Pending — still waiting
 Resolved — got the value
 Rejected — something went wrong
 
-javascript
+Example of a Promise-based wait function
+In `day3.js`, the first exercise built `wait(ms)` manually using Promise and `setTimeout`.
 
-const promise = new Promise((resolve, reject) => {
-  const success = true
+```javascript
+function wait(ms) {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve();
+    }, ms);
+  });
+}
+```
 
-  if (success) {
-    resolve("Here is your data")
-  } else {
-    reject("Something went wrong")
-  }
-})
+Exercise question explained:
 
-promise
-  .then(data => console.log(data))    // runs if resolved
-  .catch(error => console.log(error)) // runs if rejected
+- "Takes a number ms" means the function accepts the delay in milliseconds.
+- "Returns a Promise" means the function gives you a Promise object immediately.
+- "Resolves after that many ms" means the Promise completes inside `setTimeout`.
+- Then the caller can use `.then(...)` to run code after the delay.
 
-async/await — cleaner syntax for Promises
-async/await doesn't replace Promises. It's just cleaner syntax on top of them. Under the hood it's still Promises.
-javascript// 
-This:
+```javascript
+wait(1000).then(() => {
+  console.log("1 second passed");
+});
+```
+
+Async/await — cleaner syntax for Promises
+`async/await` doesn't replace Promises. It's just cleaner syntax on top of them. Under the hood it's still Promises.
+
+This promise-based pattern:
+
+```javascript
 fetch(url)
-  .then(res => res.json())
-  .then(data => console.log(data))
-  .catch(err => console.log(err))
+  .then((res) => res.json())
+  .then((data) => console.log(data))
+  .catch((err) => console.log(err));
+```
 
-// Is the same as this:
+Is equivalent to this `async/await` pattern:
+
+```javascript
 async function getData() {
   try {
-    const res = await fetch(url)
-    const data = await res.json()
-    console.log(data)
+    const res = await fetch(url);
+    const data = await res.json();
+    console.log(data);
   } catch (err) {
-    console.log(err)
+    console.log(err);
   }
 }
-await pauses only that function, not the whole program. Everything else keeps running.
-try/catch is not optional. If you don't handle errors, they fail silently and you'll spend hours debugging.
+```
+
+`await` pauses only that function, not the whole program. Everything else keeps running.
+
+`try/catch` is not optional. If you don't handle errors, they fail silently and you'll spend hours debugging.
+
+Exercise 2 — Fetch users and log name + email
+In `day3.js`, the second exercise is `getUsers()`.
+It fetches from `https://jsonplaceholder.typicode.com/users`, parses JSON, and logs the `name` and `email` for each user.
+
+Key points:
+
+- Use `await fetch(...)` to start the request.
+- Use `await res.json()` to parse the response.
+- Loop through the array and log only the required fields.
+- Wrap it in `try/catch` to handle network or parse errors.
+
+Exercise question explained:
+
+- "Fetches from that URL" means call the public users API.
+- "Parses the JSON" means convert the raw response to JavaScript data.
+- "Logs only the name and email of each user" means do not print the whole object.
+- "Handles errors with try/catch" means catch any failures and print a readable message.
+
+Exercise 3 — Fetch a single user and handle not found
+The third exercise is `getUser(id)`.
+It fetches one user by ID and handles the "user not found" case.
+
+Important details:
+
+- Valid IDs on this API are usually `1` through `10`.
+- If you pass an invalid ID, the API may return an empty object.
+- The code checks `if (!data.id)` and prints a "user not found" message.
+
+Exercise question explained:
+
+- "Takes an id" means the function accepts the user ID to request.
+- "Fetches from .../users/${id}" means the request uses the ID in the URL.
+- "If id is valid, logs the user's name" means print only the `name` field.
+- "If you pass id 999... handle that case" means do not rely on success; explicitly detect failure.
+
+Why this exercise matters
+
+- It shows the difference between a successful API response and a missing resource.
+- It teaches defensive coding: always check the response before using it.
+- It connects real-world async work with UI logic, where missing data is a common case.
+
+Summary of the exercises
+
+1. `wait(ms)` teaches manual Promise creation and delayed resolution.
+2. `getUsers()` teaches fetching a list, parsing JSON, and iterating over results.
+3. `getUser(id)` teaches fetching a single resource and handling missing data.
+
+Takeaway
+
+- Promises are the foundational async building block.
+- `async/await` is easier to read and write.
+- Always handle errors with `try/catch`.
+- In API work, success and failure both need explicit handling.
