@@ -1,0 +1,53 @@
+Today — Async JS
+This is the last major JS concept before React. And it's critical — every API call, every database query, every real-world operation is async.
+
+Why Async Exists — Under the Hood
+JavaScript is single threaded. One thing at a time. If fetching data took 3 seconds and JS just waited — your entire page would freeze for 3 seconds. Nothing could click, scroll, or move.
+So JS says: "Start this task, move on, come back when it's done."
+That's async. The mechanism that makes this work is called the Event Loop — but you don't need to master that today. Just understand the concept.
+
+Promises — what they are
+A Promise is JS saying: "I don't have this value yet, but I promise I'll give it to you when it's ready."
+A Promise has 3 states:
+
+Pending — still waiting
+Resolved — got the value
+Rejected — something went wrong
+
+javascript
+
+const promise = new Promise((resolve, reject) => {
+  const success = true
+
+  if (success) {
+    resolve("Here is your data")
+  } else {
+    reject("Something went wrong")
+  }
+})
+
+promise
+  .then(data => console.log(data))    // runs if resolved
+  .catch(error => console.log(error)) // runs if rejected
+
+async/await — cleaner syntax for Promises
+async/await doesn't replace Promises. It's just cleaner syntax on top of them. Under the hood it's still Promises.
+javascript// 
+This:
+fetch(url)
+  .then(res => res.json())
+  .then(data => console.log(data))
+  .catch(err => console.log(err))
+
+// Is the same as this:
+async function getData() {
+  try {
+    const res = await fetch(url)
+    const data = await res.json()
+    console.log(data)
+  } catch (err) {
+    console.log(err)
+  }
+}
+await pauses only that function, not the whole program. Everything else keeps running.
+try/catch is not optional. If you don't handle errors, they fail silently and you'll spend hours debugging.

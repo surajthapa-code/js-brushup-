@@ -1,0 +1,28 @@
+Moving to map, filter, reduce
+These three are in every React codebase. Rendering lists, filtering data, transforming API responses — all of it uses these. Learn them properly now.
+
+map — transform every item
+javascriptconst numbers = [1, 2, 3, 4]
+const doubled = numbers.map(num => num * 2)
+console.log(doubled) // [2, 4, 6, 8]
+Original array is untouched. map always returns a new array of the same length.
+
+filter — keep items that pass a condition
+javascriptconst numbers = [1, 2, 3, 4, 5]
+const evens = numbers.filter(num => num % 2 === 0)
+console.log(evens) // [2, 4]
+Returns a new array, shorter or equal length. Never longer.
+
+reduce — collapse array into a single value
+This one trips people up. Read carefully.
+javascriptconst numbers = [1, 2, 3, 4]
+const sum = numbers.reduce((accumulator, current) => {
+  return accumulator + current
+}, 0)  // 0 is the starting value
+console.log(sum) // 10
+
+accumulator — the running result
+current — the current item being processed
+0 — what accumulator starts as
+
+Think of it like a snowball rolling down a hill, collecting snow. Accumulator is the snowball.
