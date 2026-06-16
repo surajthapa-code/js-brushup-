@@ -1,21 +1,33 @@
-import { createSlice, nanoid } from "@reduxjs/toolkit";
-
+import { createSlice } from "@reduxjs/toolkit";
+const initialState = {
+  jobs: [],
+  filter: "all",
+};
 export const jobSlice = createSlice({
   name: "jobs",
-  initialState: {
-    items: [],
-    filter: "all",
-  },
+  initialState,
   reducers: {
     addJob: (state, action) => {
-      const job = { ...action.payload, key: nanoid() };
-      state.items.push(job);
+      state.jobs.push({
+        ...action.payload,
+        id: Date.now(),
+        date: new Date().toLocaleDateString(),
+      });
     },
     removeJob: (state, action) => {
-      state.items.filter((job) => job.id !== action.payload);
+      state.jobs = state.jobs.filter((job) => job.id !== action.payload);
+    },
+    updateStatus: (state, action) => {
+      const job = state.jobs.find((job) => job.id === action.payload.id);
+      if (job) {
+        job.status = action.payload.status;
+      }
+    },
+    setFilter: (state, action) => {
+      state.filter = action.payload;
     },
   },
 });
 
-export const { addJob, removeJob } = jobSlice.actions;
+export const { addJob, removeJob, updateStatus, setFilter } = jobSlice.actions;
 export default jobSlice.reducer;

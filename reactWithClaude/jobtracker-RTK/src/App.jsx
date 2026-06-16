@@ -5,10 +5,10 @@ import JobList from "./features/jobs/components/JobList";
 
 function App() {
   return (
-    <>
+    <div>
       <JobForm />
       <JobList />
-    </>
+    </div>
   );
 }
 
